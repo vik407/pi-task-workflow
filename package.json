@@ -1,0 +1,43 @@
+{
+  "name": "pi-workflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Project-local configurations and customizations for Pi Coding Agent.",
+  "keywords": [
+    "pi-package"
+  ],
+  "type": "module",
+  "pi": {
+    "extensions": [
+      "./.pi/extensions"
+    ],
+    "skills": [
+      "./.pi/skills"
+    ],
+    "prompts": [
+      "./.pi/prompts"
+    ],
+    "themes": [
+      "./.pi/themes"
+    ]
+  },
+  "scripts": {
+    "validate": "node scripts/validate-pi-resources.mjs",
+    "sync": "node scripts/sync-pi-resources.mjs",
+    "build": "npm run sync",
+    "task:init": "node scripts/task-workflow.mjs init",
+    "task:validate": "node scripts/task-workflow.mjs validate",
+    "task:status": "node scripts/task-workflow.mjs status",
+    "task:update": "node scripts/task-workflow.mjs update",
+    "task:archive": "node scripts/task-workflow.mjs archive",
+    "task:gate": "node scripts/task-gate.mjs",
+    "task:gate:close": "node scripts/task-gate-close.mjs",
+    "check:drift": "node scripts/check-drift.mjs",
+    "test:fixture": "node scripts/task-fixture.mjs",
+    "test:fixture:project": "node scripts/project-fixture.mjs",
+    "patterns:list": "node scripts/patterns.mjs list",
+    "patterns:add": "node scripts/patterns.mjs add",
+    "pi": "pi",
+    "pi:check": "pi --no-session -p \"Review the structure of this pi-workflow repository and suggest improvements.\""
+  }
+}
