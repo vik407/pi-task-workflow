@@ -3,10 +3,10 @@
 ## Commands run
 
 - `npm test`
-- `node ../../scripts/task-gate.mjs FXT-0001 analysis`
-- `node ../../scripts/task-gate.mjs FXT-0001 plan`
-- `node ../../scripts/task-gate.mjs FXT-0001 implementation`
-- `node ../../scripts/task-gate.mjs FXT-0001 validation`
+- `node ../../src/workflow/scripts/task-gate.mjs FXT-0001 analysis`
+- `node ../../src/workflow/scripts/task-gate.mjs FXT-0001 plan`
+- `node ../../src/workflow/scripts/task-gate.mjs FXT-0001 implementation`
+- `node ../../src/workflow/scripts/task-gate.mjs FXT-0001 validation`
 
 ## Results
 

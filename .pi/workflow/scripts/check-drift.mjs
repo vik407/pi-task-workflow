@@ -9,6 +9,7 @@ const pairs = [
   ["src/skills", ".pi/skills"],
   ["src/extensions", ".pi/extensions"],
   ["src/themes", ".pi/themes"],
+  ["src/workflow", ".pi/workflow"],
 ];
 const errors = [];
 

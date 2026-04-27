@@ -52,8 +52,8 @@ Instead:
 Use:
 
 ```text
-tasks/<TASK-ID>/analysis.md      # environment discovery and validation plan
-tasks/<TASK-ID>/validation.md    # executed checks and results
-tasks/<TASK-ID>/context/         # screenshots, logs, links, notes
-tasks/<TASK-ID>/gate-decisions.md # accepted risks and manual closures
+.pi/workflow/tasks/<TASK-ID>/analysis.md       # environment discovery and validation plan
+.pi/workflow/tasks/<TASK-ID>/validation.md     # executed checks and results
+.pi/workflow/tasks/<TASK-ID>/context/          # screenshots, logs, links, notes
+.pi/workflow/tasks/<TASK-ID>/gate-decisions.md # accepted risks and manual closures
 ```

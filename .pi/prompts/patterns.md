@@ -8,8 +8,8 @@ Manage learned project patterns.
 Use:
 
 ```bash
-npm run patterns:list -- $2
-npm run patterns:add -- $2 "${@:3}"
+node .pi/workflow/scripts/patterns.mjs list $2
+node .pi/workflow/scripts/patterns.mjs add $2 "${@:3}"
 ```
 
 Rules:

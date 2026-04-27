@@ -29,7 +29,7 @@ This repository contains configurations and customizations for Pi Coding Agent.
 - Extensions source: `src/extensions/*.{ts,js}`.
 - Themes source: `src/themes/*.json`.
 - Temporary work plans: `TODO.md`.
-- Task workspaces: `tasks/<TASK-ID>/`, where task ids match `^[A-Z]+-[0-9]+$`.
+- Task workspaces: `src/workflow/tasks/<TASK-ID>/` in this repository and `.pi/workflow/tasks/<TASK-ID>/` in distributed projects, where task ids match `^[A-Z]+-[0-9]+$`.
 
 ## Editing rules
 
@@ -56,7 +56,7 @@ Lifecycle:
 Task folder shape:
 
 ```text
-tasks/<TASK-ID>/
+.pi/workflow/tasks/<TASK-ID>/
 ├── README.md
 ├── analysis.md
 ├── analysis/
@@ -74,7 +74,7 @@ Signals are informational only: cross-repo, external dependency, design decision
 
 Analysis may finish with validation requests and open questions. The assistant should suggest terminal checks, console checks, logs to collect, or questions for teammates. The developer manually closes gates when accepting unresolved risk.
 
-Reuse learned project patterns from `tasks/knowledge/project-patterns.md`. Do not rediscover stable facts on every task. Learn once, reuse often, update when evidence changes.
+Reuse learned project patterns from `src/workflow/tasks/knowledge/project-patterns.md` in this repository and `.pi/workflow/tasks/knowledge/project-patterns.md` in distributed projects. Do not rediscover stable facts on every task. Learn once, reuse often, update when evidence changes.
 
 ## Useful commands
 
@@ -82,18 +82,18 @@ Reuse learned project patterns from `tasks/knowledge/project-patterns.md`. Do no
 npm run validate
 npm run sync
 npm run build
-npm run task:init -- ABC-0123 "Short task title"
-npm run task:validate -- ABC-0123
-npm run task:status -- ABC-0123
-npm run task:update -- ABC-0123 "What changed"
-npm run task:gate -- ABC-0123 analysis
-npm run task:gate:close -- ABC-0123 analysis "accepted after team confirmation"
-npm run task:archive -- ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs init ABC-0123 "Short task title"
+node .pi/workflow/scripts/task-workflow.mjs validate ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs status ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs update ABC-0123 "What changed"
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 analysis
+node .pi/workflow/scripts/task-gate-close.mjs ABC-0123 analysis "accepted after team confirmation"
+node .pi/workflow/scripts/task-workflow.mjs archive ABC-0123
 npm run check:drift
 npm run test:fixture
 npm run test:fixture:project
-npm run patterns:list -- PROJECT-KEY
-npm run patterns:add -- PROJECT-KEY "pattern"
+node .pi/workflow/scripts/patterns.mjs list PROJECT-KEY
+node .pi/workflow/scripts/patterns.mjs add PROJECT-KEY "pattern"
 pi
 pi list
 pi config

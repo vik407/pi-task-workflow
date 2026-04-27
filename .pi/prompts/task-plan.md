@@ -20,7 +20,7 @@ Read first:
 2. `README.md`
 3. `docs/task-workflow.md`
 4. `tasks/lessons.md` if present
-5. `tasks/knowledge/project-patterns.md` if present
+5. `.pi/workflow/tasks/knowledge/project-patterns.md` if present
 6. `tasks/$1/analysis.md`
 7. Relevant project files referenced by analysis.
 
@@ -34,7 +34,7 @@ Read first:
 5. Include test additions, coverage improvements, or environment-specific manual validation based on `analysis.md` orchestration findings.
 6. Include rollback notes.
 7. For `COMPLEX` tasks, ask: is there a simpler architecture?
-7. If new reusable project patterns are discovered, note them for `tasks/knowledge/project-patterns.md`.
+7. If new reusable project patterns are discovered, note them for `.pi/workflow/tasks/knowledge/project-patterns.md`.
 
 ## Write `tasks/$1/plan.md`
 
@@ -101,7 +101,7 @@ Planning is complete only when:
 After writing the plan, run:
 
 ```bash
-npm run task:gate -- $1 plan
+node .pi/workflow/scripts/task-gate.mjs $1 plan
 ```
 
 ## Model suggestion

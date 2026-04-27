@@ -15,7 +15,7 @@ Each task is identified by a project-management code such as `ABC-0123`. The tas
 Each task gets its own folder:
 
 ```text
-tasks/ABC-0123/
+.pi/workflow/tasks/ABC-0123/
 ├── README.md                 # Task summary and source ticket details
 ├── analysis.md               # Root analysis and discovery artifact
 ├── analysis/                 # Optional parallel/domain analysis findings
@@ -41,12 +41,12 @@ Root files are the source of truth. Optional folders hold parallel or domain-spe
 Create and inspect task folders with:
 
 ```bash
-npm run task:init -- ABC-0123 "Short task title"
-npm run task:validate -- ABC-0123
-npm run task:status -- ABC-0123
-npm run task:update -- ABC-0123 "What changed"
-npm run task:gate -- ABC-0123 analysis
-npm run task:archive -- ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs init ABC-0123 "Short task title"
+node .pi/workflow/scripts/task-workflow.mjs validate ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs status ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs update ABC-0123 "What changed"
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 analysis
+node .pi/workflow/scripts/task-workflow.mjs archive ABC-0123
 ```
 
 ## Pi prompts
@@ -78,11 +78,11 @@ Current workflow simulates phase-specific agents with prompts and task artifacts
 Shared memory lives in:
 
 ```text
-tasks/lessons.md
-tasks/knowledge/project-patterns.md
+.pi/workflow/tasks/lessons.md
+.pi/workflow/tasks/knowledge/project-patterns.md
 ```
 
-Use `tasks/lessons.md` for durable developer corrections. Use `tasks/knowledge/project-patterns.md` for reusable patterns discovered during analysis, planning, or implementation.
+Use `.pi/workflow/tasks/lessons.md` for durable developer corrections. Use `.pi/workflow/tasks/knowledge/project-patterns.md` for reusable patterns discovered during analysis, planning, or implementation.
 
 Do not rediscover stable facts on every task. If the project stack is already known, reuse it. Record only useful, stable patterns:
 
@@ -96,8 +96,8 @@ Do not rediscover stable facts on every task. If the project stack is already kn
 Commands:
 
 ```bash
-npm run patterns:list -- PROJECT-KEY
-npm run patterns:add -- PROJECT-KEY "Node + Angular + PostgreSQL; tests run with npm test"
+node .pi/workflow/scripts/patterns.mjs list PROJECT-KEY
+node .pi/workflow/scripts/patterns.mjs add PROJECT-KEY "Node + Angular + PostgreSQL; tests run with npm test"
 ```
 
 Do not overdo it. Learn once. Reuse often. Update when evidence changes.
@@ -113,10 +113,10 @@ High-reasoning models are expected for analysis, planning, complex implementatio
 Use gates before advancing phases:
 
 ```bash
-npm run task:gate -- ABC-0123 analysis
-npm run task:gate -- ABC-0123 plan
-npm run task:gate -- ABC-0123 implementation
-npm run task:gate -- ABC-0123 validation
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 analysis
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 plan
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 implementation
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 validation
 ```
 
 Gates check structure and evidence markers. They do not prove truth.
@@ -145,10 +145,10 @@ The first validates workflow mechanics with a disposable task. The second valida
 The developer may manually close a gate after accepting the risk:
 
 ```bash
-npm run task:gate:close -- ABC-0123 analysis "accepted after team confirmation"
+node .pi/workflow/scripts/task-gate-close.mjs ABC-0123 analysis "accepted after team confirmation"
 ```
 
-Manual closures are recorded in `tasks/<TASK-ID>/gate-decisions.md`.
+Manual closures are recorded in `.pi/workflow/tasks/<TASK-ID>/gate-decisions.md` for distributed projects.
 
 ## Archive decisions
 

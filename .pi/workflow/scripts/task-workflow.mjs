@@ -6,7 +6,9 @@ const root = process.cwd();
 const scriptPath = path.resolve(process.argv[1] ?? "");
 const defaultTasksRoot = scriptPath.includes(`${path.sep}.pi${path.sep}workflow${path.sep}`)
   ? path.join(root, ".pi", "workflow", "tasks")
-  : path.join(root, "tasks");
+  : scriptPath.includes(`${path.sep}src${path.sep}workflow${path.sep}`)
+    ? path.join(root, "src", "workflow", "tasks")
+    : path.join(root, "tasks");
 const tasksRoot = process.env.PI_WORKFLOW_TASKS_DIR
   ? path.resolve(root, process.env.PI_WORKFLOW_TASKS_DIR)
   : defaultTasksRoot;

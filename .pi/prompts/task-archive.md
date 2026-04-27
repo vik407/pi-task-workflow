@@ -8,7 +8,7 @@ Archive task `$1`.
 Recommended first:
 
 ```bash
-npm run task:gate -- $1 validation
+node .pi/workflow/scripts/task-gate.mjs $1 validation
 ```
 
 Then ask the developer whether to archive.
@@ -18,7 +18,7 @@ Archive may be valid even with open validation when the decision is external, su
 If the developer confirms, run:
 
 ```bash
-npm run task:archive -- $1
+node .pi/workflow/scripts/task-workflow.mjs archive $1
 ```
 
 Rules:

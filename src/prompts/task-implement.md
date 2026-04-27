@@ -91,7 +91,7 @@ Include:
 After implementation notes are updated, run:
 
 ```bash
-npm run task:gate -- $1 implementation
+node .pi/workflow/scripts/task-gate.mjs $1 implementation
 ```
 
 ## Model suggestion

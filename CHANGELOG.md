@@ -8,6 +8,9 @@ The format follows the spirit of [Keep a Changelog](https://keepachangelog.com/e
 
 ### Added
 
+- Distribution package build through `npm run dist`, producing `dist/.pi/` only.
+- Distributed `.pi/workflow/README.md` and `.pi/workflow/CHANGELOG.md` from source files under `src/workflow/`.
+- Isolation consistency updates so distributed prompts and docs use direct `.pi/workflow/scripts/*.mjs` commands instead of requiring target-project `package.json` scripts.
 - Distribution documentation explaining `.pi/`-only usage versus isolated full task workflow integration under `.pi/workflow/`.
 - Model policy documentation in `docs/model-policy.md`.
 - Release readiness documentation in `docs/release-readiness.md`.
@@ -51,6 +54,7 @@ The format follows the spirit of [Keep a Changelog](https://keepachangelog.com/e
 
 ### Changed
 
+- Moved workflow support source from root-level `scripts/` and `tasks/` into `src/workflow/`, deployed to `.pi/workflow/` during sync.
 - Expanded `README.md` with project introduction, Pi overview, workflow purpose, and intended usage.
 - `.pi/` is treated as generated runtime output from validated `src/` resources.
 

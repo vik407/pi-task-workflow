@@ -17,7 +17,7 @@ Expected work:
 6. If new tests were recommended, verify they were added or explain why not.
 7. Record commands, environment checks, log checks, manual validations, and results in `tasks/$1/validation.md`.
 7. List remaining risks or manual checks.
-8. Run `npm run task:gate -- $1 validation` after recording results.
+8. Run `node .pi/workflow/scripts/task-gate.mjs $1 validation` after recording results.
 9. Suggest, but do not run, final git commands.
 10. Suggest the model class for PR drafting or follow-up:
    - Standard model is acceptable for PR drafting when validation passed.

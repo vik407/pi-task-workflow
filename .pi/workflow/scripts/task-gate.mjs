@@ -6,7 +6,9 @@ const root = process.cwd();
 const scriptPath = path.resolve(process.argv[1] ?? "");
 const defaultTasksRoot = scriptPath.includes(`${path.sep}.pi${path.sep}workflow${path.sep}`)
   ? path.join(root, ".pi", "workflow", "tasks")
-  : path.join(root, "tasks");
+  : scriptPath.includes(`${path.sep}src${path.sep}workflow${path.sep}`)
+    ? path.join(root, "src", "workflow", "tasks")
+    : path.join(root, "tasks");
 const tasksRoot = process.env.PI_WORKFLOW_TASKS_DIR
   ? path.resolve(root, process.env.PI_WORKFLOW_TASKS_DIR)
   : defaultTasksRoot;
@@ -14,6 +16,9 @@ const taskIdPattern = /^[A-Z]+-[0-9]+$/;
 const [taskId, gate] = process.argv.slice(2);
 const validGates = new Set(["analysis", "plan", "implementation", "validation"]);
 const errors = [];
+const gateCloseCommand = scriptPath.includes(`${path.sep}.pi${path.sep}workflow${path.sep}`)
+  ? "node .pi/workflow/scripts/task-gate-close.mjs"
+  : "npm run task:gate:close --";
 
 function usage() {
   console.log("Usage: node scripts/task-gate.mjs TASK-ID analysis|plan|implementation|validation");
@@ -125,7 +130,7 @@ if (errors.length) {
   console.error(`Task gate failed: ${taskId} ${gate}\n`);
   for (const error of errors) console.error(`- ${error}`);
   console.error(`\nTo accept the risk manually, the developer may run:`);
-  console.error(`npm run task:gate:close -- ${taskId} ${gate} "reason for accepting open questions"`);
+  console.error(`${gateCloseCommand} ${taskId} ${gate} "reason for accepting open questions"`);
   process.exit(1);
 }
 

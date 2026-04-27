@@ -15,14 +15,14 @@ Read first:
 2. `README.md`
 3. `docs/task-workflow.md`
 4. `tasks/lessons.md` if present
-5. `tasks/knowledge/project-patterns.md` if present
+5. `.pi/workflow/tasks/knowledge/project-patterns.md` if present
 6. `tasks/$1/README.md`
 7. Existing files under `tasks/$1/context/` if present
 
 ## Investigation process
 
 1. Understand symptoms, requirements, acceptance criteria, and user intent.
-2. Reuse known project patterns from `tasks/knowledge/project-patterns.md` before rediscovering stable facts.
+2. Reuse known project patterns from `.pi/workflow/tasks/knowledge/project-patterns.md` before rediscovering stable facts.
 3. Discover the actual stack from project files only when unknown, changed, or relevant to the task. Do not assume.
 4. Detect the test and environment orchestration available in the project only when unknown, changed, or relevant: package scripts, test framework, CI config, coverage tooling, e2e tools, local development, dev environment, staging, production, logs, monitoring, and existing test locations.
 4. Read relevant files with evidence-first discipline.
@@ -39,7 +39,7 @@ Read first:
 9. Store debug scripts, reproduction notes, traces, or temporary findings under `tasks/$1/debugging/`.
 10. If truth cannot be fully proven from code, propose validation requests: terminal commands, console checks, logs to collect, reproduction steps, or manual checks.
 11. If another person must answer, write the question with context and the suggested owner.
-12. If a stable reusable fact is learned, record it in `tasks/knowledge/project-patterns.md` or suggest `npm run patterns:add -- <PROJECT-KEY> "fact"`.
+12. If a stable reusable fact is learned, record it in `.pi/workflow/tasks/knowledge/project-patterns.md` or suggest `node .pi/workflow/scripts/patterns.mjs add <PROJECT-KEY> "fact"`.
 
 ## Write `tasks/$1/analysis.md`
 
@@ -138,13 +138,13 @@ Analysis is complete only when:
 After writing analysis, run:
 
 ```bash
-npm run task:gate -- $1 analysis
+node .pi/workflow/scripts/task-gate.mjs $1 analysis
 ```
 
 If the gate has unresolved truth checks or open questions, the developer may manually close it with:
 
 ```bash
-npm run task:gate:close -- $1 analysis "reason for accepting open questions"
+node .pi/workflow/scripts/task-gate-close.mjs $1 analysis "reason for accepting open questions"
 ```
 
 ## Model suggestion

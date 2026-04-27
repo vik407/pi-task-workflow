@@ -55,18 +55,20 @@ When complexity, hallucination risk, fake parity, or over-engineering may appear
 │   ├── prompts/              # Source prompt templates
 │   ├── skills/               # Source skills
 │   ├── extensions/           # Source TypeScript/JavaScript extensions
-│   └── themes/               # Source JSON themes
+│   ├── themes/               # Source JSON themes
+│   └── workflow/             # Source workflow support copied to .pi/workflow
+│       ├── scripts/          # Source validation and task scripts
+│       └── tasks/            # Source task templates, lessons, and patterns
 ├── .pi/                      # Generated Pi runtime structure loaded by Pi
 │   ├── settings.json
 │   ├── prompts/
 │   ├── skills/
 │   ├── extensions/
-│   └── themes/
-├── scripts/                  # Validation and synchronization scripts
+│   ├── themes/
+│   └── workflow/             # Generated isolated workflow support
+│       ├── scripts/
+│       └── tasks/
 ├── fixtures/                 # Real project fixtures for workflow hardening
-├── tasks/                    # Per-task Scrum/Kanban workspaces
-│   ├── ABC-0123/
-│   └── archive/
 ├── docs/                     # Workflow notes and project documentation
 ├── CHANGELOG.md              # History of meaningful repository changes
 └── package.json              # Optional manifest for sharing as a pi-package
@@ -94,6 +96,7 @@ npm run build
 - `src/skills/` → `.pi/skills/`
 - `src/extensions/` → `.pi/extensions/`
 - `src/themes/` → `.pi/themes/`
+- `src/workflow/` → `.pi/workflow/`
 
 ### Documentation and changelog workflow
 
@@ -113,24 +116,26 @@ npm run build
 
 Work is organized by task code, such as `ABC-0123`.
 
-Each task gets a dedicated workspace under `tasks/<TASK-ID>/` with this lifecycle:
+Each distributed task gets a dedicated workspace under `.pi/workflow/tasks/<TASK-ID>/` with this lifecycle:
 
 1. Analysis and discovery
 2. Planning
 3. Implementation
 4. Validation
 
-Create and inspect task workspaces with:
+In an existing project using isolated distribution, create and inspect task workspaces with:
 
 ```bash
-npm run task:init -- ABC-0123 "Short task title"
-npm run task:validate -- ABC-0123
-npm run task:status -- ABC-0123
-npm run task:update -- ABC-0123 "What changed"
-npm run task:gate -- ABC-0123 analysis
-npm run task:gate:close -- ABC-0123 analysis "accepted after team confirmation"
-npm run task:archive -- ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs init ABC-0123 "Short task title"
+node .pi/workflow/scripts/task-workflow.mjs validate ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs status ABC-0123
+node .pi/workflow/scripts/task-workflow.mjs update ABC-0123 "What changed"
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 analysis
+node .pi/workflow/scripts/task-gate-close.mjs ABC-0123 analysis "accepted after team confirmation"
+node .pi/workflow/scripts/task-workflow.mjs archive ABC-0123
 ```
+
+If the target project chooses to merge package scripts, `npm run task:*` aliases may be used. They are optional.
 
 Use Pi prompt templates:
 
@@ -180,15 +185,13 @@ pi
 
 Pi will load the copied project-local resources from `.pi/`.
 
-If the target project also wants task gates, task storage, and learning patterns, keep those support files isolated under `.pi/workflow/`:
+If the target project also wants task gates, task storage, and learning patterns, they are already included under `.pi/workflow/` after `npm run sync`.
 
-```bash
-mkdir -p /path/to/target-project/.pi/workflow
-cp -R scripts /path/to/target-project/.pi/workflow/scripts
-cp -R tasks /path/to/target-project/.pi/workflow/tasks
-```
+The generated `.pi/workflow/` folder includes its own `README.md` and `CHANGELOG.md` for target-project users.
 
-Then merge only the needed `package.json` scripts and point them to `.pi/workflow/scripts/*.mjs`.
+No root-level `scripts/` or `tasks/` folders are required in the target project.
+
+Optional package aliases may point to `.pi/workflow/scripts/*.mjs`.
 
 Simple rule:
 
@@ -240,14 +243,16 @@ Pi will automatically load:
 
 ## Learning patterns
 
-Reusable project knowledge lives in `tasks/knowledge/project-patterns.md`.
+Reusable project knowledge lives in `.pi/workflow/tasks/knowledge/project-patterns.md` for distributed projects and `src/workflow/tasks/knowledge/project-patterns.md` while developing this workflow repository.
 
 Use it to avoid repeated discovery of stable facts, such as stack, database, commands, validation paths, environments, and conventions.
 
 ```bash
-npm run patterns:list -- PROJECT-KEY
-npm run patterns:add -- PROJECT-KEY "Node + Angular + PostgreSQL; tests run with npm test"
+node .pi/workflow/scripts/patterns.mjs list PROJECT-KEY
+node .pi/workflow/scripts/patterns.mjs add PROJECT-KEY "Node + Angular + PostgreSQL; tests run with npm test"
 ```
+
+Optional npm aliases may be merged into the target project, but the isolated workflow does not require them.
 
 Do not overdo it. Learn once. Reuse often. Update when evidence changes.
 
@@ -260,6 +265,26 @@ Two fixture levels harden the workflow:
 
 The real project fixture lives in `fixtures/sample-node-project/` and proves that gates can work against executable project code, not only synthetic artifacts.
 
+## Distribution package
+
+The full repository is source code.
+
+The distribution artifact is only the generated `.pi/` folder.
+
+Build it with:
+
+```bash
+npm run dist
+```
+
+Output:
+
+```text
+dist/.pi/
+```
+
+Use `dist/.pi/` when publishing or copying only the runtime workflow into another project.
+
 ## Release readiness
 
 Before treating workflow changes as production-ready, run:
@@ -270,6 +295,7 @@ npm run sync
 npm run check:drift
 npm run test:fixture
 npm run test:fixture:project
+npm run dist
 ```
 
 ## Pi packages

@@ -29,7 +29,7 @@ Read first:
 2. `README.md`
 3. `docs/task-workflow.md`
 4. `tasks/lessons.md` if present
-5. `tasks/knowledge/project-patterns.md` if present
+5. `.pi/workflow/tasks/knowledge/project-patterns.md` if present
 6. All root task artifacts:
    - `tasks/$1/README.md`
    - `tasks/$1/analysis.md`

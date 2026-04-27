@@ -52,7 +52,7 @@ No active signals.
 ## Validation Requests
 
 - Run `npm test` from `fixtures/sample-node-project`.
-- Run `node ../../scripts/task-gate.mjs FXT-0001 analysis` from `fixtures/sample-node-project`.
+- Run `node ../../src/workflow/scripts/task-gate.mjs FXT-0001 analysis` from `fixtures/sample-node-project`.
 
 ## Open Questions
 

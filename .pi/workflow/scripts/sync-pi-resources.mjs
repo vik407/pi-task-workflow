@@ -17,7 +17,7 @@ async function exists(filePath) {
 }
 
 function runValidation() {
-  const result = spawnSync(process.execPath, ["scripts/validate-pi-resources.mjs"], {
+  const result = spawnSync(process.execPath, ["src/workflow/scripts/validate-pi-resources.mjs"], {
     cwd: root,
     stdio: "inherit",
   });
@@ -39,5 +39,7 @@ await copyPath(path.join(srcDir, "settings.json"), path.join(piDir, "settings.js
 for (const directory of ["prompts", "skills", "extensions", "themes"]) {
   await copyPath(path.join(srcDir, directory), path.join(piDir, directory));
 }
+
+await copyPath(path.join(srcDir, "workflow"), path.join(piDir, "workflow"));
 
 console.log("Synchronized src/ resources into .pi/.");

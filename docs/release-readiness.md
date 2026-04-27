@@ -12,6 +12,7 @@ npm run sync
 npm run check:drift
 npm run test:fixture
 npm run test:fixture:project
+npm run dist
 ```
 
 ## Release Criteria
@@ -20,6 +21,7 @@ npm run test:fixture:project
 - `.pi/` matches generated output from `src/`.
 - Disposable task fixture passes.
 - Real project fixture passes.
+- Distribution package builds to `dist/.pi/`.
 - Documentation is current.
 - `CHANGELOG.md` is updated under `[Unreleased]`.
 - No secrets are present.
@@ -30,11 +32,13 @@ npm run test:fixture:project
 For a completed task:
 
 ```bash
-npm run task:gate -- ABC-0123 analysis
-npm run task:gate -- ABC-0123 plan
-npm run task:gate -- ABC-0123 implementation
-npm run task:gate -- ABC-0123 validation
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 analysis
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 plan
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 implementation
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 validation
 ```
+
+In this workflow repository, the equivalent npm aliases are also available.
 
 A task is not complete until validation passes or remaining manual checks are documented.
 

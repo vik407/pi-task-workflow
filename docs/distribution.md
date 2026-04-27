@@ -6,7 +6,29 @@ This repository has two usage modes.
 
 Keep the target project clean.
 
-When installing into an existing project that may already have folders such as `.claude/`, `.cursor/`, or project-specific scripts, prefer isolating Pi workflow files under `.pi/`.
+When installing into an existing project that may already have folders such as `.claude/`, `.cursor/`, or project-specific scripts, keep Pi workflow files isolated under `.pi/`.
+
+## Source and generated layout
+
+In this repository, `src/` is the source of truth.
+
+```text
+src/workflow/
+├── scripts/
+└── tasks/
+```
+
+During sync, it is copied to:
+
+```text
+.pi/workflow/
+├── scripts/
+└── tasks/
+```
+
+Distributed projects should consume `.pi/`, not `src/`.
+
+The generated `.pi/workflow/` folder includes a distribution-specific `README.md` and `CHANGELOG.md`.
 
 ## 1. Pi resources only
 
@@ -28,22 +50,39 @@ This mode includes:
 - `.pi/extensions/`
 - `.pi/themes/`
 
-This mode does not include task gate scripts, fixtures, or helper npm commands.
-
 ## 2. Full workflow, isolated under `.pi/`
 
 Recommended for existing projects.
 
-Copy Pi resources and workflow support files under `.pi/workflow/`:
+Copy the generated `.pi/` folder. It already contains workflow support under `.pi/workflow/` after `npm run sync`.
 
 ```bash
 cp -R .pi /path/to/target-project/.pi
-mkdir -p /path/to/target-project/.pi/workflow
-cp -R scripts /path/to/target-project/.pi/workflow/scripts
-cp -R tasks /path/to/target-project/.pi/workflow/tasks
 ```
 
-Then merge only the needed scripts into the target project's `package.json`:
+Expected target layout:
+
+```text
+.pi/
+├── settings.json
+├── prompts/
+├── skills/
+├── extensions/
+├── themes/
+└── workflow/
+    ├── scripts/
+    └── tasks/
+```
+
+Run commands directly from the isolated workflow:
+
+```bash
+node .pi/workflow/scripts/task-workflow.mjs init ABC-0123 "Short task title"
+node .pi/workflow/scripts/task-gate.mjs ABC-0123 analysis
+node .pi/workflow/scripts/patterns.mjs list PROJECT-KEY
+```
+
+Optional: merge aliases into the target project's `package.json` only if the team wants shorter commands:
 
 ```json
 {
@@ -59,6 +98,8 @@ Then merge only the needed scripts into the target project's `package.json`:
 }
 ```
 
+Do not require package script aliases. They are convenience only.
+
 The scripts detect this isolated layout and store task data in:
 
 ```text
@@ -67,19 +108,23 @@ The scripts detect this isolated layout and store task data in:
 
 This keeps workflow state away from the project root.
 
-## 3. Full workflow, root-level layout
+## Distribution package
 
-Use this only when the project wants visible root-level task folders and scripts:
+The full repository is source code.
+
+The distribution package contains only generated `.pi/`:
 
 ```bash
-cp -R .pi /path/to/target-project/.pi
-cp -R scripts /path/to/target-project/scripts
-cp -R tasks /path/to/target-project/tasks
+npm run dist
 ```
 
-Then merge scripts that point to `scripts/*.mjs`.
+Output:
 
-Do not blindly overwrite an existing project `package.json`.
+```text
+dist/.pi/
+```
+
+Use `dist/.pi/` when publishing or copying the runtime workflow into another project.
 
 ## Development mode
 
@@ -96,8 +141,8 @@ npm run check:drift
 
 `.pi/` is the clean distribution boundary.
 
-- Light usage: copy `.pi/` only.
-- Serious usage: copy `.pi/` and place support files under `.pi/workflow/`.
-- Root-level `scripts/` and `tasks/` are useful for developing this workflow repository, but isolated `.pi/workflow/` is better for existing projects.
+- Light usage: copy `.pi/` and use prompts, skills, settings, extensions, and themes.
+- Serious usage: copy `.pi/` and use `.pi/workflow/scripts` plus `.pi/workflow/tasks`.
+- Do not copy root-level `scripts/` or `tasks/`; they are no longer part of the distribution model.
 
 Do not over-install. Start small. Add only what the project will use.

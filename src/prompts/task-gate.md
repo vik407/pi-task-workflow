@@ -8,7 +8,7 @@ Run the task gate for `$1` phase `$2`.
 Use:
 
 ```bash
-npm run task:gate -- $1 $2
+node .pi/workflow/scripts/task-gate.mjs $1 $2
 ```
 
 If it fails:
@@ -22,7 +22,7 @@ If it fails:
 Manual closure command:
 
 ```bash
-npm run task:gate:close -- $1 $2 "reason for accepting open questions"
+node .pi/workflow/scripts/task-gate-close.mjs $1 $2 "reason for accepting open questions"
 ```
 
 Only the developer should decide manual closure.

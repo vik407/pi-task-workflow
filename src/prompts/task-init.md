@@ -10,7 +10,7 @@ Use `tasks/$1/` as the task context.
 ## Instructions
 
 1. Validate task id against `^[A-Z]+-[0-9]+$`.
-2. Run `node scripts/task-workflow.mjs init $ARGUMENTS`.
+2. Run `node .pi/workflow/scripts/task-workflow.mjs init $ARGUMENTS` when installed in an existing project.
 3. Load project context:
    - `AGENTS.md`
    - `README.md`

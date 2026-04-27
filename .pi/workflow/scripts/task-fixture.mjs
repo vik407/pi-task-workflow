@@ -5,21 +5,23 @@ import path from "node:path";
 
 const root = process.cwd();
 const taskId = "ABC-0123";
-const taskDir = path.join(root, "tasks", taskId);
+const tasksRoot = path.join(root, "src", "workflow", "tasks");
+const taskDir = path.join(tasksRoot, taskId);
+const workflowEnv = { ...process.env, PI_WORKFLOW_TASKS_DIR: "src/workflow/tasks" };
 
 function run(args) {
-  const result = spawnSync(process.execPath, args, { cwd: root, stdio: "inherit" });
+  const result = spawnSync(process.execPath, args, { cwd: root, stdio: "inherit", env: workflowEnv });
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
 await rm(taskDir, { recursive: true, force: true });
-run(["scripts/task-workflow.mjs", "init", taskId, "Fixture task"]);
+run(["src/workflow/scripts/task-workflow.mjs", "init", taskId, "Fixture task"]);
 
 await writeFile(path.join(taskDir, "analysis.md"), `# Analysis: ${taskId}
 
 ## Executive Summary
 
-Fixture validates task gate behavior using scripts/task-fixture.mjs evidence.
+Fixture validates task gate behavior using src/workflow/scripts/task-fixture.mjs evidence.
 
 ## Complexity Classification
 
@@ -32,12 +34,12 @@ Fixture validates task gate behavior using scripts/task-fixture.mjs evidence.
 
 ### Root Cause
 
-- **Primary Issue**: Fixture-only validation in scripts/task-fixture.mjs.
+- **Primary Issue**: Fixture-only validation in src/workflow/scripts/task-fixture.mjs.
 - **Contributing Factors**: None.
 
 ### Affected Components
 
-- scripts/task-fixture.mjs — fixture runner.
+- src/workflow/scripts/task-fixture.mjs — fixture runner.
 
 ### Risk Assessment
 
@@ -45,14 +47,14 @@ Fixture validates task gate behavior using scripts/task-fixture.mjs evidence.
 
 ### Key Evidence
 
-- scripts/task-fixture.mjs creates deterministic task artifacts.
+- src/workflow/scripts/task-fixture.mjs creates deterministic task artifacts.
 
 ## Test and Environment Orchestration
 
-- **Detected Local Commands**: node scripts/task-gate.mjs ABC-0123 analysis
+- **Detected Local Commands**: node src/workflow/scripts/task-gate.mjs ABC-0123 analysis
 - **CI Jobs**: not found for fixture scope.
 - **Frameworks**: Node.js script fixture.
-- **Existing Test Locations**: scripts/task-fixture.mjs.
+- **Existing Test Locations**: src/workflow/scripts/task-fixture.mjs.
 - **Environment Path**: local only.
 - **Logs and Observability**: not found for fixture scope.
 - **Manual Validation Paths**: none.
@@ -65,7 +67,7 @@ No active signals.
 
 ## Validation Requests
 
-- node scripts/task-gate.mjs ABC-0123 analysis
+- node src/workflow/scripts/task-gate.mjs ABC-0123 analysis
 
 ## Open Questions
 
@@ -132,10 +134,10 @@ Created fixture task artifacts for validation only. No product code changed.
 
 ## Files changed
 
-- tasks/${taskId}/analysis.md — fixture analysis.
-- tasks/${taskId}/plan.md — fixture plan.
-- tasks/${taskId}/implementation.md — fixture implementation.
-- tasks/${taskId}/validation.md — fixture validation.
+- src/workflow/tasks/${taskId}/analysis.md — fixture analysis.
+- src/workflow/tasks/${taskId}/plan.md — fixture plan.
+- src/workflow/tasks/${taskId}/implementation.md — fixture implementation.
+- src/workflow/tasks/${taskId}/validation.md — fixture validation.
 
 ## Notes
 
@@ -146,10 +148,10 @@ await writeFile(path.join(taskDir, "validation.md"), `# ${taskId} Validation
 
 ## Commands run
 
-- node scripts/task-gate.mjs ${taskId} analysis
-- node scripts/task-gate.mjs ${taskId} plan
-- node scripts/task-gate.mjs ${taskId} implementation
-- node scripts/task-gate.mjs ${taskId} validation
+- node src/workflow/scripts/task-gate.mjs ${taskId} analysis
+- node src/workflow/scripts/task-gate.mjs ${taskId} plan
+- node src/workflow/scripts/task-gate.mjs ${taskId} implementation
+- node src/workflow/scripts/task-gate.mjs ${taskId} validation
 
 ## Results
 
@@ -165,7 +167,7 @@ None.
 `);
 
 for (const gate of ["analysis", "plan", "implementation", "validation"]) {
-  run(["scripts/task-gate.mjs", taskId, gate]);
+  run(["src/workflow/scripts/task-gate.mjs", taskId, gate]);
 }
 
 await rm(taskDir, { recursive: true, force: true });

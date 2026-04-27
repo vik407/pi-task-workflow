@@ -7,6 +7,9 @@ npm-debug.log*
 .pi/npm/
 .pi/git/
 
+# Build output
+/dist/
+
 # Local environment
 .env
 .env.*
