@@ -8,6 +8,7 @@ The format follows the spirit of [Keep a Changelog](https://keepachangelog.com/e
 
 ### Added
 
+- Distribution documentation explaining `.pi/`-only usage versus isolated full task workflow integration under `.pi/workflow/`.
 - Model policy documentation in `docs/model-policy.md`.
 - Release readiness documentation in `docs/release-readiness.md`.
 - Task gate enforcement through `scripts/task-gate.mjs` and `npm run task:gate`.

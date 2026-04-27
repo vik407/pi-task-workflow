@@ -153,9 +153,52 @@ At the end of analysis, planning, implementation, validation, and delta updates,
 
 Gates check structure, not truth. When analysis cannot prove truth from repository evidence, it must list test and environment orchestration, validation requests, and open questions. If a test framework exists, the plan should add tests or coverage when needed. If CI is missing, the plan should define local, development, staging, production, logs, or manual validation paths. The developer may manually close a gate after accepting the risk.
 
+## Usage and distribution
+
+This repository contains the full source workflow.
+
+For development of the workflow, edit `src/` and run:
+
+```bash
+npm run sync
+```
+
+For using the workflow inside another project, users only need the generated `.pi/` folder for Pi behavior.
+
+Copy or update this folder into the target project root:
+
+```bash
+cp -R .pi /path/to/target-project/.pi
+```
+
+Then run Pi from the target project:
+
+```bash
+cd /path/to/target-project
+pi
+```
+
+Pi will load the copied project-local resources from `.pi/`.
+
+If the target project also wants task gates, task storage, and learning patterns, keep those support files isolated under `.pi/workflow/`:
+
+```bash
+mkdir -p /path/to/target-project/.pi/workflow
+cp -R scripts /path/to/target-project/.pi/workflow/scripts
+cp -R tasks /path/to/target-project/.pi/workflow/tasks
+```
+
+Then merge only the needed `package.json` scripts and point them to `.pi/workflow/scripts/*.mjs`.
+
+Simple rule:
+
+- Need only Pi prompts, skills, settings, extensions, and themes → copy `.pi/`.
+- Need full task discipline without polluting the target project root → copy `.pi/` plus `.pi/workflow/scripts` and `.pi/workflow/tasks`.
+- Avoid overwriting an existing project `package.json`; merge scripts deliberately.
+
 ## Quick start
 
-From this directory:
+From this repository:
 
 ```bash
 npm run sync

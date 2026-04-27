@@ -3,8 +3,15 @@ import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
+const scriptPath = path.resolve(process.argv[1] ?? "");
+const defaultTasksRoot = scriptPath.includes(`${path.sep}.pi${path.sep}workflow${path.sep}`)
+  ? path.join(root, ".pi", "workflow", "tasks")
+  : path.join(root, "tasks");
+const tasksRoot = process.env.PI_WORKFLOW_TASKS_DIR
+  ? path.resolve(root, process.env.PI_WORKFLOW_TASKS_DIR)
+  : defaultTasksRoot;
 const [command, projectKey = "default", ...valueParts] = process.argv.slice(2);
-const dir = path.join(root, "tasks", "knowledge");
+const dir = path.join(tasksRoot, "knowledge");
 const file = path.join(dir, "project-patterns.md");
 
 async function exists(p) { try { await stat(p); return true; } catch { return false; } }

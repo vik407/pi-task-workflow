@@ -3,6 +3,13 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
+const scriptPath = path.resolve(process.argv[1] ?? "");
+const defaultTasksRoot = scriptPath.includes(`${path.sep}.pi${path.sep}workflow${path.sep}`)
+  ? path.join(root, ".pi", "workflow", "tasks")
+  : path.join(root, "tasks");
+const tasksRoot = process.env.PI_WORKFLOW_TASKS_DIR
+  ? path.resolve(root, process.env.PI_WORKFLOW_TASKS_DIR)
+  : defaultTasksRoot;
 const taskIdPattern = /^[A-Z]+-[0-9]+$/;
 const [taskId, gate] = process.argv.slice(2);
 const validGates = new Set(["analysis", "plan", "implementation", "validation"]);
@@ -17,16 +24,16 @@ async function exists(file) {
 }
 
 async function readTaskFile(name) {
-  const file = path.join(root, "tasks", taskId, name);
+  const file = path.join(tasksRoot, taskId, name);
   if (!(await exists(file))) {
-    errors.push(`Missing tasks/${taskId}/${name}`);
+    errors.push(`Missing ${path.relative(root, file)}`);
     return "";
   }
   return readFile(file, "utf8");
 }
 
 async function hasManualClosure() {
-  const file = path.join(root, "tasks", taskId, "gate-decisions.md");
+  const file = path.join(tasksRoot, taskId, "gate-decisions.md");
   if (!(await exists(file))) return false;
   const content = await readFile(file, "utf8");
   const phasePattern = new RegExp(`- \\*\\*Phase\\*\\*: ${gate}([\\s\\S]*?)- \\*\\*Decision\\*\\*: closed`, "i");

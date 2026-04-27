@@ -2,6 +2,8 @@
 
 This repository supports a Scrum/Kanban-style task workflow.
 
+For distribution guidance, see `docs/distribution.md`. Projects that only need Pi resources can copy `.pi/`. Projects that need gates and task scripts should prefer the isolated `.pi/workflow/` layout.
+
 Each task is identified by a project-management code such as `ABC-0123`. The task code must match:
 
 ```text

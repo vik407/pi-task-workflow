@@ -3,6 +3,13 @@ import { mkdir, readFile, writeFile, stat, rename } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
+const scriptPath = path.resolve(process.argv[1] ?? "");
+const defaultTasksRoot = scriptPath.includes(`${path.sep}.pi${path.sep}workflow${path.sep}`)
+  ? path.join(root, ".pi", "workflow", "tasks")
+  : path.join(root, "tasks");
+const tasksRoot = process.env.PI_WORKFLOW_TASKS_DIR
+  ? path.resolve(root, process.env.PI_WORKFLOW_TASKS_DIR)
+  : defaultTasksRoot;
 const taskIdPattern = /^[A-Z]+-[0-9]+$/;
 
 function usage() {
@@ -35,7 +42,11 @@ function assertTaskId(taskId) {
 }
 
 function taskDir(taskId) {
-  return path.join(root, "tasks", taskId);
+  return path.join(tasksRoot, taskId);
+}
+
+function taskPath(taskId) {
+  return path.relative(root, taskDir(taskId));
 }
 
 async function writeNew(filePath, content) {
@@ -69,7 +80,7 @@ async function initTask(taskId, title = "") {
   await writeNew(path.join(dir, "validation", ".gitkeep"), "");
   await writeNew(path.join(dir, "debugging", ".gitkeep"), "");
 
-  console.log(`Task workspace ready: tasks/${taskId}`);
+  console.log(`Task workspace ready: ${taskPath(taskId)}`);
 }
 
 async function validateTask(taskId) {
@@ -86,7 +97,7 @@ async function validateTask(taskId) {
     throw new Error(`Task ${taskId} is missing: ${missing.join(", ")}`);
   }
 
-  console.log(`Task workspace valid: tasks/${taskId}`);
+  console.log(`Task workspace valid: ${taskPath(taskId)}`);
 }
 
 async function statusTask(taskId) {
@@ -113,11 +124,11 @@ async function updateTask(taskId, change = "") {
 async function archiveTask(taskId) {
   await validateTask(taskId);
   const source = taskDir(taskId);
-  const target = path.join(root, "tasks", "archive", taskId);
-  if (await exists(target)) throw new Error(`Archive already exists: tasks/archive/${taskId}`);
+  const target = path.join(tasksRoot, "archive", taskId);
+  if (await exists(target)) throw new Error(`Archive already exists: ${path.relative(root, target)}`);
   await mkdir(path.dirname(target), { recursive: true });
   await rename(source, target);
-  console.log(`Task archived: tasks/archive/${taskId}`);
+  console.log(`Task archived: ${path.relative(root, target)}`);
 }
 
 const [command, taskId, ...titleParts] = process.argv.slice(2);
