@@ -24,6 +24,7 @@
   "scripts": {
     "validate": "node src/workflow/scripts/validate-pi-resources.mjs",
     "sync": "node src/workflow/scripts/sync-pi-resources.mjs",
+    "sync:target": "node src/workflow/scripts/sync-pi-resources.mjs --target",
     "build": "npm run sync",
     "task:init": "node src/workflow/scripts/task-workflow.mjs init",
     "task:validate": "node src/workflow/scripts/task-workflow.mjs validate",
